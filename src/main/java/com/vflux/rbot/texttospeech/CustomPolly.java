@@ -3,6 +3,9 @@ package com.vflux.rbot.texttospeech;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
@@ -17,21 +20,21 @@ import com.amazonaws.services.polly.model.Voice;
 
 import javazoom.jl.decoder.JavaLayerException;
 
-
+@Component
 public class CustomPolly {
-	
+
 	private AmazonPolly amazonPolly;
-	
-	public CustomPolly(Region region) {
-		BasicAWSCredentials awsCredentials = new BasicAWSCredentials("AKIAJHGKJ3GKOLSABU4Q",
-				"LPjoQe3Qxr3R58Lm4ysBe21ugFbt7Ai4W3GACTky");
+
+	public CustomPolly(@Autowired Region awsPollyRegion, @Autowired String awsKeyId, @Autowired String awsKeySecret) {
+
+		BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsKeyId, awsKeySecret);
 		//
 		// Create an Amazon Polly client in a specific region
 		//
 		this.amazonPolly = AmazonPollyClientBuilder.standard()
-				.withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).withRegion(region.getName()).build();
+				.withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).withRegion(awsPollyRegion.getName()).build();
 	}
-	
+
 	public void play(String text) throws IOException, JavaLayerException {
 		//
 		// Get the audio stream created using the text
@@ -42,7 +45,7 @@ public class CustomPolly {
 		//
 		AudioPlayer.play(speechStream);
 	}
-	
+
 	public InputStream synthesize(String text, OutputFormat format) throws IOException {
 		//
 		// Get the default voice
@@ -65,7 +68,7 @@ public class CustomPolly {
 		//
 		return synthRes.getAudioStream();
 	}
-	
+
 	public Voice getVoice() {
 		//
 		// Create describe voices request.
@@ -75,9 +78,5 @@ public class CustomPolly {
 		DescribeVoicesResult describeVoicesResult = this.amazonPolly.describeVoices(describeVoicesRequest);
 		return describeVoicesResult.getVoices().get(0);
 	}
-	
-	
-	
-	
 
 }
