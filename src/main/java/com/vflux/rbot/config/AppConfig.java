@@ -45,13 +45,13 @@ public class AppConfig {
 	}
 	
 	@Bean(name = "awsCredentialsProvider") 
-	public AWSCredentialsProvider getAWSCredentials() {
+	public AWSCredentialsProvider awsCredentialsProvider() {
 		BasicAWSCredentials awsCredentials = new BasicAWSCredentials(this.awsKeyId, this.awsKeySecret);
 		return new AWSStaticCredentialsProvider(awsCredentials);
 	}
 	
 	@Bean(name = "sessionCredentials")
-	public BasicSessionCredentials getSessionCredentials() {
+	public BasicSessionCredentials sessionCredentials() {
 		AWSSecurityTokenServiceClient sts_client = (AWSSecurityTokenServiceClient) AWSSecurityTokenServiceClientBuilder.defaultClient();
 		GetSessionTokenRequest session_token_request = new GetSessionTokenRequest();
 		if(this.credentialsValidityDuration == null || this.credentialsValidityDuration.trim().equals("")) {
@@ -71,7 +71,7 @@ public class AppConfig {
 	}
 	
 	@Bean(name = "awsS3DataBucket") 
-	public String getAWSS3AudioBucket() {
+	public String awsS3DataBucket() {
 		return awsS3DataBucket;
 	}
 }
