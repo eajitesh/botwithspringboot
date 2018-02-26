@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Region;
@@ -25,14 +26,13 @@ public class CustomPolly {
 
 	private AmazonPolly amazonPolly;
 
-	public CustomPolly(@Autowired Region awsPollyRegion, @Autowired String awsKeyId, @Autowired String awsKeySecret) {
-
-		BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsKeyId, awsKeySecret);
+	public CustomPolly(@Autowired Region awsRegion, @Autowired String awsKeyId, @Autowired String awsKeySecret,
+			@Autowired AWSCredentialsProvider awsCredentialsProvider) {
 		//
 		// Create an Amazon Polly client in a specific region
 		//
-		this.amazonPolly = AmazonPollyClientBuilder.standard()
-				.withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).withRegion(awsPollyRegion.getName()).build();
+		this.amazonPolly = AmazonPollyClientBuilder.standard().withCredentials(awsCredentialsProvider)
+				.withRegion(awsRegion.getName()).build();
 	}
 
 	public void play(String text) throws IOException, JavaLayerException {
