@@ -13,3 +13,7 @@ Class AWSCloudStorage provides sample implementation for instantiating Amazon S3
 ## AWS STS (Security Token Service)
 
 AppConfig creates a SessionCredential bean which is created using AWS access key id, access key secret and session token. The same is used in AWSCLoudStorage implementation to instantiate Amazon S3.
+
+## Twilio API
+
+The project demonstrates how to use Twilio phone service to play audio file stored in AWS S3. The audio file is created using Amazon Polly service.
