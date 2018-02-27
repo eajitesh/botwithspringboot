@@ -1,5 +1,7 @@
 package com.vflux.rbot.storage;
 
+import java.io.InputStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +11,7 @@ import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 
 @Component("awsCloudStorage")
 public class AWSCloudStorage implements CloudStorage {
@@ -36,6 +39,15 @@ public class AWSCloudStorage implements CloudStorage {
 	public void uploadFile(String keyName, String filePath) {
 		try {
 			this.amazonS3.putObject(this.awsS3DataBucket, keyName, filePath);
+		} catch (AmazonServiceException e) {
+			System.err.println(e.getErrorMessage());
+		}
+	}
+	
+	public void uploadAudioStream(String keyName, InputStream inputStream) {
+		try {
+			ObjectMetadata objectMetaData = new ObjectMetadata();
+			this.amazonS3.putObject(this.awsS3DataBucket, keyName, inputStream, objectMetaData);
 		} catch (AmazonServiceException e) {
 			System.err.println(e.getErrorMessage());
 		}

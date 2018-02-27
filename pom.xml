@@ -67,16 +67,17 @@
 		    <version>2.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-sts -->
-		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-sts -->
-<dependency>
-    <groupId>com.amazonaws</groupId>
-    <artifactId>aws-java-sdk-sts</artifactId>
-    <version>1.11.285</version>
-</dependency>
-
-		
-		
-		
+		<dependency>
+		    <groupId>com.amazonaws</groupId>
+		    <artifactId>aws-java-sdk-sts</artifactId>
+		    <version>1.11.285</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.twilio.sdk/twilio -->
+		<dependency>
+		    <groupId>com.twilio.sdk</groupId>
+		    <artifactId>twilio</artifactId>
+		    <version>7.17.8</version>
+		</dependency>
 	</dependencies>
 
 	<build>

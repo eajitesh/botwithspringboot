@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.polly.AmazonPolly;
 import com.amazonaws.services.polly.AmazonPollyClientBuilder;
@@ -18,6 +19,7 @@ import com.amazonaws.services.polly.model.OutputFormat;
 import com.amazonaws.services.polly.model.SynthesizeSpeechRequest;
 import com.amazonaws.services.polly.model.SynthesizeSpeechResult;
 import com.amazonaws.services.polly.model.Voice;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import javazoom.jl.decoder.JavaLayerException;
 
@@ -26,13 +28,22 @@ public class CustomPolly {
 
 	private AmazonPolly amazonPolly;
 
-	public CustomPolly(@Autowired Region awsRegion, @Autowired String awsKeyId, @Autowired String awsKeySecret,
-			@Autowired AWSCredentialsProvider awsCredentialsProvider) {
-		//
-		// Create an Amazon Polly client in a specific region
-		//
-		this.amazonPolly = AmazonPollyClientBuilder.standard().withCredentials(awsCredentialsProvider)
-				.withRegion(awsRegion.getName()).build();
+//	public CustomPolly(@Autowired Region awsRegion, @Autowired String awsKeyId, @Autowired String awsKeySecret,
+//			@Autowired AWSCredentialsProvider awsCredentialsProvider) {
+//		//
+//		// Create an Amazon Polly client in a specific region
+//		//
+//		this.amazonPolly = AmazonPollyClientBuilder.standard().withCredentials(awsCredentialsProvider)
+//				.withRegion(awsRegion.getName()).build();
+//	}
+	
+	public CustomPolly(@Autowired Region awsRegion, @Autowired BasicSessionCredentials sessionCredentials) {
+		this.amazonPolly = AmazonPollyClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(sessionCredentials)).withRegion(awsRegion.getName()).build();
+	}
+	
+	public InputStream synthesisSpeechMP3Format(String text) throws IOException {
+		return this.synthesize(text, OutputFormat.Mp3);
 	}
 
 	public void play(String text) throws IOException, JavaLayerException {

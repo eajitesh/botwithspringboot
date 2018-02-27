@@ -19,7 +19,7 @@ import com.amazonaws.services.securitytoken.model.GetSessionTokenResult;
 
 @Configuration
 @PropertySource("classpath:application.properties")
-public class AppConfig {
+public class AWSAppConfig {
 	
 	private static final Integer TEMPORARY_CREDENTIALS_DURATION_DEFAULT = 7200;
 	
