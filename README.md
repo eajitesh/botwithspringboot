@@ -17,3 +17,14 @@ AppConfig creates a SessionCredential bean which is created using AWS access key
 ## Twilio API
 
 The project demonstrates how to use Twilio phone service to play audio file stored in AWS S3. The audio file is created using Amazon Polly service.
+
+
+
+# Related Posts
+
+The following are some of the posts related to source code in this project:
+* [Twilio & AWS S3 using Java & Spring Boot – Code Example](https://vitalflux.com/twilio-aws-s3-using-java-spring-boot-code-example/)
+* [AWS Temporary Credentials with Java & Spring Boot](https://vitalflux.com/aws-temporary-credentials-java-spring-boot/)
+* [Amazon S3 with Spring Boot & Java – Sample Code](https://vitalflux.com/amazon-s3-spring-boot-java-sample-code/)
+
+* []
