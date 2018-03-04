@@ -2,13 +2,13 @@ package com.vflux.rbot.texttospeech;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.BasicSessionCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.polly.AmazonPolly;
@@ -19,13 +19,18 @@ import com.amazonaws.services.polly.model.OutputFormat;
 import com.amazonaws.services.polly.model.SynthesizeSpeechRequest;
 import com.amazonaws.services.polly.model.SynthesizeSpeechResult;
 import com.amazonaws.services.polly.model.Voice;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import javazoom.jl.decoder.JavaLayerException;
 
 @Component
 public class CustomPolly {
 
+	@Autowired
+	String pollyLanguageCode;
+	@Autowired
+	String pollyVoiceId;
+
+	
 	private AmazonPolly amazonPolly;
 
 //	public CustomPolly(@Autowired Region awsRegion, @Autowired String awsKeyId, @Autowired String awsKeySecret,
@@ -84,10 +89,25 @@ public class CustomPolly {
 		//
 		// Create describe voices request.
 		//
-		DescribeVoicesRequest describeVoicesRequest = new DescribeVoicesRequest();
+		DescribeVoicesRequest enInVoicesRequest = new DescribeVoicesRequest().withLanguageCode(this.pollyLanguageCode);
+		//
 		// Synchronously ask Amazon Polly to describe available TTS voices.
-		DescribeVoicesResult describeVoicesResult = this.amazonPolly.describeVoices(describeVoicesRequest);
-		return describeVoicesResult.getVoices().get(0);
+		//
+		DescribeVoicesResult enInVoicesResult = this.amazonPolly.describeVoices(enInVoicesRequest);
+		Iterator<Voice> voiceIter = enInVoicesResult.getVoices().iterator();
+		Voice voice = null;
+		String pollyVoiceIdLower = this.pollyVoiceId.trim().equals("")?"raveena":this.pollyVoiceId.toLowerCase();
+		while(voiceIter.hasNext()) {
+			Voice tmpvoice = voiceIter.next();
+			if(tmpvoice.getId().toLowerCase().equals(pollyVoiceIdLower)) {
+				voice = tmpvoice;
+				break;
+			}
+		}
+		if(voice == null) {
+			voice = enInVoicesResult.getVoices().get(0);
+		}
+		return voice;
 	}
 
 }

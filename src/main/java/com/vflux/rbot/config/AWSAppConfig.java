@@ -28,6 +28,8 @@ public class AWSAppConfig {
 	@Value("${aws.region}") String awsRegion;
 	@Value("${aws.s3.data.bucket}") String awsS3DataBucket; 
 	@Value("${aws.temporary.credentials.validity.duration}") String credentialsValidityDuration;  
+	@Value("${aws.polly.language.code}") String pollyLanguageCode;
+	@Value("${aws.polly.voice.id}") String pollyVoiceId;
 	
 	@Bean(name = "awsKeyId") 
 	public String getAWSKeyId() {
@@ -73,5 +75,15 @@ public class AWSAppConfig {
 	@Bean(name = "awsS3DataBucket") 
 	public String awsS3DataBucket() {
 		return awsS3DataBucket;
+	}
+	
+	@Bean(name = "pollyLanguageCode") 
+	public String pollyLanguageCode() {
+		return pollyLanguageCode;
+	}
+	
+	@Bean(name = "pollyVoiceId") 
+	public String pollyVoiceId() {
+		return pollyVoiceId;
 	}
 }

@@ -1,5 +1,6 @@
 package com.vflux.rbot.voice;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,8 @@ import com.twilio.http.HttpMethod;
 import com.twilio.http.Request;
 import com.twilio.http.Response;
 import com.twilio.http.TwilioRestClient;
+import com.twilio.rest.api.v2010.account.Call;
+import com.twilio.type.PhoneNumber;
 
 @Component
 public class TwilioVoiceService implements VoiceService {
@@ -27,19 +30,15 @@ public class TwilioVoiceService implements VoiceService {
 	
 	@Override
 	public void playVoice(String toNumber, String voicePath) {
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("From", this.fromPhoneNumber);
-		params.put("To", toNumber);
 		String url = TWIMLET_BASE_URL + voicePath;
-		params.put("Url", url);
 		
-		Request request = new Request(HttpMethod.POST, "https://api.twilio.com/" + APIVERSION + "/Accounts/"+ this.twilioRestClient.getAccountSid() + "/Calls");
-		request.addPostParam("From", this.fromPhoneNumber);
-		request.addPostParam("To", toNumber);
-		request.addPostParam("Url", url);
-		
-		Response response = this.twilioRestClient.request(request);
-		System.out.println(response.getContent());
+		PhoneNumber to = new PhoneNumber(toNumber); // Replace with your phone number
+        PhoneNumber from = new PhoneNumber(this.fromPhoneNumber); // Replace with a Twilio number
+        URI uri = URI.create(url);
+
+        // Make the call
+        Call call = Call.creator(to, from, uri).create(this.twilioRestClient);
+        System.out.println(call.getSid());
 	}
 
 }

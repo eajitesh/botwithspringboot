@@ -26,4 +26,14 @@ public class TwilioAppConfig {
 	public String fromPhoneNumber() {
 		return this.fromPhoneNumber;
 	}
+	
+	@Bean(name = "twilioAccountSID")
+	public String twilioAccountSID() {
+		return this.accountSID;
+	}
+	
+	@Bean(name = "twilioAuthToken")
+	public String twilioAuthToken() {
+		return this.authToken;
+	}
 }
